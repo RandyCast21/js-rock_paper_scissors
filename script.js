@@ -3,48 +3,33 @@ console.log("Hello World!")
 function getComputerChoice () {
     let opcionCompu = Math.floor(Math.random() * 3);
     if (opcionCompu == 0) {
-        return "Rock";
+        return "Piedra";
     } else if (opcionCompu == 1) {
-        return "Paper";
+        return "Papel";
     } else {
-        return "Scissors";
+        return "Tijeras";
     }
 }
-
-function getHumanChoice (){
-    let opcionHuman = prompt("Bienvenido al juego Piedra, Papel, Tijeras. Ingresa 0 para Piedra, 1 para Papel o 2 para Tijeras");
-    if (opcionHuman == 0) {
-        return "Rock";
-    } else if (opcionHuman == 1) {
-        return "Paper";
-    } else if (opcionHuman == 2) {
-        return "Scissors";
-    } else {
-        window.alert("Muy gracioso, juegas papel")
-        return "Paper";
-    }
-}
-
 
 function playRound (humano,computadora) {
     if (humano == computadora) {
         return "Empate. Nadie gana"
-    } else if (humano == "Rock" && computadora == "Scissors") {
+    } else if (humano == "Piedra" && computadora == "Tijeras") {
         humanScore = humanScore + 1;
         return "Humano gana, 1 punto"
-    } else if (humano == "Rock" && computadora == "Paper") {
+    } else if (humano == "Piedra" && computadora == "Papel") {
         computerScore = computerScore + 1;
         return "Computadora gana, 1 punto"
-    } else if (humano == "Paper" && computadora == "Rock") {
+    } else if (humano == "Papel" && computadora == "Piedra") {
         humanScore = humanScore + 1;
         return "Humano gana, 1 punto"
-    } else if (humano == "Paper" && computadora == "Scissors") {
+    } else if (humano == "Papel" && computadora == "Tijeras") {
         computerScore = computerScore + 1;
         return "Computadora gana, 1 punto"
-    } else if (humano == "Scissors" && computadora == "Paper") {
+    } else if (humano == "Tijeras" && computadora == "Papel") {
         humanScore = humanScore + 1;
         return "Humano gana, 1 punto"
-    } else if (humano == "Scissors" && computadora == "Rock") {
+    } else if (humano == "Tijeras" && computadora == "Piedra") {
         computerScore = computerScore + 1;
         return "Computadora gana, 1 punto"
     }
@@ -52,18 +37,56 @@ function playRound (humano,computadora) {
 
 humanScore = 0;
 computerScore = 0;
+contadorRondas = 0;
 
-function playGame () {
-    let x = 0;
-    while (x < 5){
-        x = x + 1;
-        let humano = getHumanChoice();
-        let computadora = getComputerChoice();
-        console.log(humano)
-        console.log(computadora)
-        console.log(playRound (humano, computadora));
+let eleccionDiv = document.querySelector("#eleccionDiv");
+let resultadoDiv = document.querySelector("#resultado");
+let ganadorDiv = document.querySelector("#ganador");
+
+eleccionDiv.addEventListener("click", (e) => {
+    let target = e.target;
+
+    switch(target.id){
+        case "Piedra":
+            resultadoDiv.textContent = playRound("Piedra",getComputerChoice());
+            console.log("Puntuación ronda: ", humanScore, " humano vs ", computerScore, " computadora");
+            contadorRondas += 1;
+            break;
+
+        case "Papel":
+            resultadoDiv.textContent = playRound("Papel", getComputerChoice());
+            console.log("Puntuación ronda: ", humanScore, " humano vs ", computerScore, " computadora");
+            contadorRondas += 1;
+            break;
+
+        case "Tijeras":
+            resultadoDiv.textContent = playRound("Tijeras", getComputerChoice());
+            console.log("Puntuación ronda: ", humanScore, " humano vs ", computerScore, " computadora");
+            contadorRondas += 1;
+            break;
     }
-}
 
-playGame ();
-console.log("Puntuación final: ", humanScore, " humano vs ", computerScore, " computadora");
+    if (contadorRondas >= 5){
+        let ganadorMatch = "";
+        let mayorPuntaje = "";
+        if (humanScore > computerScore){
+            ganadorMatch = "Humano";
+            mayorPuntaje = humanScore;
+        } else if (humanScore < computerScore) {
+            ganadorMatch = "Computadora";
+            mayorPuntaje = computerScore;
+        } else {
+            ganadorMatch = "Empate"
+            mayorPuntaje = humanScore
+        }
+
+        ganadorDiv.textContent = ganadorMatch + " con " + mayorPuntaje + " puntos";
+
+        contadorRondas = 0
+        humanScore = 0
+        computerScore = 0
+    }
+
+});
+
+
